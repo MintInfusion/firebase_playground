@@ -1,44 +1,36 @@
 import { useState } from "react"
-import logo from "./logo.svg"
 import "./App.css"
-import "./firebase/firebaseApp"
+import { AuthButtons } from "./firebase/AuthButtons"
+import React from "react"
+import { getAuth, onAuthStateChanged, signOut, User } from "firebase/auth"
+import { firebaseApp } from "./firebase/firebaseApp"
+
+export const LoginContext = React.createContext<{ user: User | null }>({
+  user: null,
+})
+
+const auth = getAuth(firebaseApp)
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [user, setUser] = useState(auth.currentUser)
+
+  onAuthStateChanged(auth, user => setUser(user))
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount(count => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {" | "}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
+      <main className="App-header">
+        <LoginContext.Provider value={{ user }}>
+          {user ? <LogoutButton /> : <AuthButtons />}
+        </LoginContext.Provider>
+      </main>
+    </div>
+  )
+}
+
+function LogoutButton() {
+  return (
+    <div>
+      <button onClick={() => signOut(auth)}>signout</button>
     </div>
   )
 }

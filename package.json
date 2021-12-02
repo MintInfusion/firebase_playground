@@ -21,9 +21,9 @@
   "homepage": "https://github.com/MintInfusion/firebase_playground#readme",
   "dependencies": {
     "firebase": "^9.5.0",
-    "firebaseui": "^6.0.0",
     "react": "^17.0.0",
-    "react-dom": "^17.0.0"
+    "react-dom": "^17.0.0",
+    "react-firebaseui": "^6.0.0"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
